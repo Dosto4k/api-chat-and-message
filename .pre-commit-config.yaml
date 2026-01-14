@@ -1,0 +1,14 @@
+repos:
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.12.7
+  hooks:
+    - id: ruff-check
+      args: [
+          --fix,
+          --select, ANN, --select, FAST, --select, ASYNC, --select, B,
+          --select, A, --select, EXE, --select, ISC, --select, T20,
+          --select, Q, --select, RET, --select, SIM, --select, TID,
+          --select, ARG, --select, C90, --select, N, --select, E,
+          --select, W, --select, F, --select, S
+        ]
+    - id: ruff-format
