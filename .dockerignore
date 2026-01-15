@@ -1,0 +1,13 @@
+.git
+.gitignore
+**__pycache__/
+*.pyc
+.venv/
+.env
+.ruff_cache/
+.pre-commit-config.yaml
+LICENSE
+README.md
+.dockerignore
+Dockerfile
+docker-compose.yaml

@@ -1,0 +1,33 @@
+services:
+  backend:
+    build: ./
+    restart: always
+    container_name: app
+    env_file:
+      - ./.env
+    ports:
+      - 8000:8000
+    command: 
+      bash -c "uv run manage.py makemigrations && 
+      uv run manage.py migrate && 
+      uv run manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - postgresql_db
+    networks:
+      - backend
+
+  postgresql_db:
+    image: postgres:16
+    container_name: postgres
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
