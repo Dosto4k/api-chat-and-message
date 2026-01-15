@@ -1,3 +1,5 @@
+from typing import Self
+
 from django.db import models
 
 
@@ -8,6 +10,23 @@ class Chat(models.Model):
     class Meta:
         verbose_name = "Чат"
         verbose_name_plural = "Чаты"
+
+    @classmethod
+    def get_chats_with_limited_messages(
+        cls,
+        limit: int,
+    ) -> models.manager.BaseManager[Self]:
+        """
+        Получение всех чатов с заполненным полем latest_messages, в
+        котором находятся limit последних сообщений каждого чата
+        """
+        return cls.objects.prefetch_related(
+            models.Prefetch(
+                "messages",
+                queryset=Message.objects.all()[:limit],
+                to_attr="latest_messages",
+            )
+        )
 
 
 class Message(models.Model):
