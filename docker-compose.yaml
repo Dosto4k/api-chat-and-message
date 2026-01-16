@@ -12,7 +12,8 @@ services:
       uv run manage.py migrate && 
       uv run manage.py runserver 0.0.0.0:8000"
     depends_on:
-      - postgresql_db
+      postgresql_db:
+        condition: service_healthy
     networks:
       - backend
 
@@ -21,10 +22,19 @@ services:
     container_name: postgres
     env_file:
       - ./.env
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     networks:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
